@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/olivere/elastic/v7"
+	"golang_practice/go-es/es_CRUD"
 )
 
 // 索引mapping定义，这里仿微博消息结构定义
@@ -62,5 +63,13 @@ func main(){
 			panic(err)
 		}
 	}
+	if exists {
+		fmt.Println("AAAAA")
+	}
+
+	//es_CRUD.Insert()
+	//es_CRUD.Get()
+	//es_CRUD.GetIndexInfo()
+	es_CRUD.Query()
 }
 

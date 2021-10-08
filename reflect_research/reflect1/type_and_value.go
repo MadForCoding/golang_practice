@@ -9,7 +9,8 @@ import (
 
 func main() {
 	//easyTry()
-	reflectValue()
+	//reflectValue()
+	reflectType()
 }
 
 func easyTry() {
@@ -24,4 +25,27 @@ func reflectValue() {
 	px := d.Addr().Interface().(*int) // px := &x
 	*px = 3                           // x = 3
 	fmt.Println(x)
+}
+
+func reflectType() {
+	a := reflect.TypeOf(3)
+	fmt.Println(a)
+
+	b := reflect.TypeOf(os.Stdout)
+	fmt.Println(b)
+
+	var human *baseHuman
+	human = &Male{}
+
+}
+
+
+type baseHuman struct {
+	Name string
+	Age string
+}
+
+type Male struct {
+	baseHuman
+	Sex int
 }
