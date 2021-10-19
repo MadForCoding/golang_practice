@@ -34,8 +34,8 @@ func reflectType() {
 	b := reflect.TypeOf(os.Stdout)
 	fmt.Println(b)
 
-	var human *baseHuman
-	human = &Male{}
+	//var human *baseHuman
+	//human = &Male{}
 
 }
 
