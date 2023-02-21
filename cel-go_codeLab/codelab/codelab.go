@@ -19,6 +19,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/google/cel-go/checker/decls"
 	"reflect"
 	"sort"
 	"strings"
@@ -58,6 +59,36 @@ func main() {
 // Compile, eval, profit!
 func exercise1() {
 	fmt.Println("=== Exercise 1: Hello World ===\n")
+	// Create the standard env
+	env, err := cel.NewEnv()
+	if err != nil {
+		glog.Exitf("env error: %v", err)
+	}
+	ast, iss := env.Parse(`"Hello, World!"`)
+	// Report syntactic errors, if present.
+	if iss.Err() != nil {
+		glog.Exit(iss.Err())
+	}
+	// Type-check the expression for correctness.
+	checked, iss := env.Check(ast)
+	// Report semantic errors, if present.
+	if iss.Err() != nil {
+		glog.Exit(iss.Err())
+	}
+	// Check the result type is a string.
+	if !proto.Equal(checked.ResultType(), decls.String) {
+		glog.Exitf(
+			"Got %v, wanted %v result type",
+			checked.ResultType(), decls.String,
+		)
+	}
+	// Plan the program.
+	program, err := env.Program(checked)
+	if err != nil {
+		glog.Exitf("program error: %v", err)
+	}
+	// Evaluate the program without any additional arguments.
+	eval(program, cel.NoVars())
 
 	fmt.Println()
 }
@@ -68,7 +99,24 @@ func exercise1() {
 // determine whether a specific auth claim is set.
 func exercise2() {
 	fmt.Println("=== Exercise 2: Variables ===\n")
+	env, err := cel.NewEnv(
+		// Add cel.EnvOptions values here.
+		cel.Types(&rpcpb.AttributeContext_Request{}),
+		cel.Declarations(
+			decls.NewVar("request",
+				decls.NewObjectType("google.rpc.context.AttributeContext.Request"),
+				),
+			),
+	)
+	if err != nil {
+		glog.Exit(err)
+	}
+	ast := compile(env, `request.auth.claims.group == 'admin'`, decls.Bool)
+	program, _ := env.Program(ast)
 
+	// Evaluate a request object that sets the proper group claim.
+	claims := map[string]string{"group": "admin"}
+	eval(program, request(auth("user:me@acme.co", claims), time.Now()))
 	fmt.Println()
 }
 
