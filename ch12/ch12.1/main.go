@@ -26,5 +26,11 @@ func main() {
 	*px = 100
 	fmt.Println(x)
 
-
+	var s = "encrypt_de"
+	for i := 0; i < len(s); i++ {
+		fmt.Println(string(s[i]))
+	}
+	var a = "a"
+	var b = "ab"
+	fmt.Println(a < b)
 }
