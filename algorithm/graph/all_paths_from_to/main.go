@@ -19,7 +19,7 @@ func main() {
 	}
 	fmt.Println(graph)
 
-	resList := allArrivialPaths(graph)
+	resList := allArrivalPaths(graph)
 	fmt.Println(resList)
 	for _, row := range resList {
 		var str = strings.Builder{}
@@ -34,7 +34,7 @@ func main() {
 	}
 }
 
-func allArrivialPaths(graph [][]int) [][]int {
+func allArrivalPaths(graph [][]int) [][]int {
 	var resList = make([][]int, 0)
 	var path = []int{}
 	var existNode = make([]bool, len(graph)+1)
