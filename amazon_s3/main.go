@@ -38,7 +38,7 @@ var s3Cfg = struct {
 	AccessKey string
 	SecretKey string
 }{
-	Host:      "https://s3g.data-infra.shopee.io",
+	Host:      "xx",
 	Bucket:    "xx",
 	AccessKey: "xx",
 	SecretKey: "xx",
