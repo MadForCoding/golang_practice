@@ -32,7 +32,14 @@ func main() {
 		nil,          // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-
+	err = ch.ExchangeDeclare(
+		"aa",
+		"topic",
+		true,
+		false,
+		false,
+		false,
+		nil)
 	body := bodyFrom(os.Args)
 	err = ch.Publish(
 		"",     // exchange

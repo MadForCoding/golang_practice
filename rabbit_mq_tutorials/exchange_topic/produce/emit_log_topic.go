@@ -24,7 +24,7 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"logs_topic", // name
+		"case-manager-exchange-th", // name
 		"topic",      // type
 		true,         // durable
 		false,        // auto-deleted
@@ -35,14 +35,15 @@ func main() {
 	failOnError(err, "Failed to declare an exchange")
 
 	body := bodyFrom(os.Args)
+	bb := `{"action":1,"case_id":12,"retry_times":123,"create_time":12344}`
 	err = ch.Publish(
-		"logs_topic",          // exchange
-		severityFrom(os.Args), // routing key
+		"case-manager-exchange-th",          // exchange
+		"shopeepay_th_dev_case-manager_case-fix-topic", // routing key
 		false, // mandatory
 		false, // immediate
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(body),
+			ContentType: "application/json",
+			Body:        []byte(bb),
 		})
 	failOnError(err, "Failed to publish a message")
 

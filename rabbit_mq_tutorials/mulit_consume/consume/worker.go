@@ -60,6 +60,7 @@ func main() {
 			t := time.Duration(dotCount)
 			time.Sleep(t * time.Second)
 			log.Printf("Done")
+			// 手动commit
 			d.Ack(false)
 		}
 	}()

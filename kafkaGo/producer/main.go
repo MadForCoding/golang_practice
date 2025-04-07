@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/Shopify/sarama"
 )
 
@@ -11,7 +12,7 @@ func main() {
 	config.Producer.Partitioner = sarama.NewRandomPartitioner //写到随机分区中，默认设置8个分区
 	config.Producer.Return.Successes = true
 	msg := &sarama.ProducerMessage{}
-	msg.Topic = `nginx_log`
+	msg.Topic = `abcd`
 	//msg.Value = sarama.ByteEncoder([]byte("chen"))
 	msg.Value = sarama.StringEncoder("this is a good test")
 	client, err := sarama.NewSyncProducer([]string{"127.0.0.1:9092"}, config)

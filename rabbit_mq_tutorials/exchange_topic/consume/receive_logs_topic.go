@@ -34,14 +34,21 @@ func main() {
 	failOnError(err, "Failed to declare an exchange")
 
 	q, err := ch.QueueDeclare(
-		"",    // name
-		false, // durable
+		"task",    // name
+		true, // durable
 		false, // delete when unused
-		true,  // exclusive
+		false,  // exclusive
 		false, // no-wait
 		nil,   // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
+
+	err = ch.Qos(
+		1,     // prefetch count
+		0,     // prefetch size
+		false, // global
+	)
+	failOnError(err, "Failed to set QoS")
 
 	if len(os.Args) < 2 {
 		log.Printf("Usage: %s [binding_key]...", os.Args[0])
@@ -61,7 +68,7 @@ func main() {
 	msgs, err := ch.Consume(
 		q.Name, // queue
 		"",     // consumer
-		true,   // auto ack
+		false,   // auto ack
 		false,  // exclusive
 		false,  // no local
 		false,  // no wait
@@ -74,6 +81,7 @@ func main() {
 	go func() {
 		for d := range msgs {
 			log.Printf(" [x] %s", d.Body)
+			d.Ack(false)
 		}
 	}()
 
